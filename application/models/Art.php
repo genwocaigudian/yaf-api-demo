@@ -14,7 +14,7 @@ class ArtModel {
     public function __construct() {
         $this->_db = new PDO('mysql:host=127.0.0.1;dbname=yaf_api', 'root', '123456');
         //不设置下面这行, pdo会在拼sql 的时候, 把 int 0转成string 0
-//        $this->_db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+        $this->_db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
     }
 
     public function add($title, $content, $author, $cate, $artId = 0) {
