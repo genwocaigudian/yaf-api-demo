@@ -36,6 +36,7 @@ class SmsModel {
             return false;
         }
 
+        //需要传入 apikey
         $apikey = '';
 
         //初始化client,apikey作为所有请求的默认值
