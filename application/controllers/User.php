@@ -13,7 +13,7 @@ class UserController extends Yaf_Controller_Abstract {
     }
 
     public function loginAction() {
-        $submit = $this->getRequest()->getQuery('submit', '0');
+        $submit = Common_Request::getRequest('submit', '0');
         if(1 != $submit) {
             echo json_encode([
                 'errno' => -1001,
@@ -22,8 +22,8 @@ class UserController extends Yaf_Controller_Abstract {
             return false;
         }
 
-        $uname = $this->getRequest()->getPost('uname', false);
-        $pwd = $this->getRequest()->getPost('pwd', false);
+        $uname = Common_Request::postRequest('uname', false);
+        $pwd = Common_Request::postRequest('pwd', false);
 
         if(!$uname || !$pwd) {
             echo json_encode([
