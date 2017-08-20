@@ -27,7 +27,7 @@ class UserModel {
         }
 
         $userInfo = $ret[0];
-        if($this->_password_generate($pwd) != $userInfo['pwd']) {
+        if(Common_Password::pwdEncode($pwd) != $userInfo['pwd']) {
             $this->errno = -1004;
             $this->errmsg = '密码错误';
             return false;
@@ -52,7 +52,7 @@ class UserModel {
             return false;
         }
 
-        $pwd = $this->_password_generate($pwd);
+        $pwd = Common_Password::pwdEncode($pwd);
 
         $query = $this->_db->prepare("insert into `user` (`id`, `name`, `pwd`, `reg_time`) VALUES (null, ?, ?, ?)");
         $ret = $query->execute([$uname, $pwd, date('Y-m-d H:i:s')]);
@@ -64,9 +64,5 @@ class UserModel {
         }
 
         return true;
-    }
-
-    private function _password_generate($pwd) {
-        return md5('salt-xxxx-' . $pwd);
     }
 }

@@ -29,4 +29,17 @@ class Common_Request {
     public static function postRequest($key, $default=null) {
         return self::request($key, $default, 'post');
     }
+
+    public static function response($errno=0, $errmsg='', $data=[]) {
+        $rep = [
+            'errno' => $errno,
+            'errmsg' => $errmsg
+        ];
+
+        if($data) {
+            $rep['data'] = $data;
+        }
+
+        return json_encode($rep);
+    }
 }

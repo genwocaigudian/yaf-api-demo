@@ -15,10 +15,7 @@ class UserController extends Yaf_Controller_Abstract {
     public function loginAction() {
         $submit = Common_Request::getRequest('submit', '0');
         if(1 != $submit) {
-            echo json_encode([
-                'errno' => -1001,
-                'errmsg' => '请通过正确渠道提交'
-            ]);
+            echo Common_Request::response(-1001, '请通过正确渠道提交');
             return false;
         }
 
