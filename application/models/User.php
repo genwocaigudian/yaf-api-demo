@@ -9,24 +9,21 @@
 class UserModel {
     public $errno = 0;
     public $errmsg = '';
-    private $_db = null;
+    private $_dao = null;
 
     public function __construct() {
-        $this->_db = new PDO('mysql:host=127.0.0.1;dbname=yaf_api', 'root', '123456');
+        $this->_dao = new Db_User();
     }
 
     public function login($uname, $pwd) {
-        $query = $this->_db->prepare("select `id`,`pwd` from `user` where `name`= ? ");
-        $query->execute([$uname]);
-        $ret = $query->fetchAll();
+        $userInfo = $this->_dao->find($uname);
 
-        if(!$ret || 1!=count($ret)) {
-            $this->errno = -1003;
-            $this->errmsg = '用户查找失败';
+        if(!$userInfo) {
+            $this->errno = $this->_dao->errno();
+            $this->errmsg = $this->_dao->errmsg();
             return false;
         }
 
-        $userInfo = $ret[0];
         if(Common_Password::pwdEncode($pwd) != $userInfo['pwd']) {
             $this->errno = -1004;
             $this->errmsg = '密码错误';
@@ -36,13 +33,9 @@ class UserModel {
     }
 
     public function register($uname, $pwd) {
-        $query = $this->_db->prepare("select count(*) as c from `user` where `name`= ? ");
-        $query->execute([$uname]);
-        $count = $query->fetchAll();
-
-        if(0 != $count[0]['c']) {
-            $this->errno = -1005;
-            $this->errmsg = '用户名已存在';
+        if(!$this->_dao->checkExists($uname)) {
+            $this->errno = $this->_dao->errno();
+            $this->errmsg = $this->_dao->errmsg();
             return false;
         }
 
@@ -54,12 +47,9 @@ class UserModel {
 
         $pwd = Common_Password::pwdEncode($pwd);
 
-        $query = $this->_db->prepare("insert into `user` (`id`, `name`, `pwd`, `reg_time`) VALUES (null, ?, ?, ?)");
-        $ret = $query->execute([$uname, $pwd, date('Y-m-d H:i:s')]);
-
-        if(!$ret) {
-            $this->errno = -1007;
-            $this->errmsg = '注册失败, 写入数据失败';
+        if(!$this->_dao->addUser($uname, $pwd, date('Y:m:d H:i:s'))) {
+            $this->errno = $this->_dao->errno();
+            $this->errmsg = $this->_dao->errmsg();
             return false;
         }
 
