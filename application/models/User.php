@@ -25,8 +25,7 @@ class UserModel {
         }
 
         if(Common_Password::pwdEncode($pwd) != $userInfo['pwd']) {
-            $this->errno = -1004;
-            $this->errmsg = '密码错误';
+            list($this->errno, $this->errmsg) = array_values(Err_Map::get(1004));
             return false;
         }
         return intval($userInfo[0]);
@@ -40,8 +39,7 @@ class UserModel {
         }
 
         if(8 > strlen($pwd)) {
-            $this->errno = -1006;
-            $this->errmsg = '密码太短, 请设置至少8位的密码';
+            list($this->errno, $this->errmsg) = array_values(Err_Map::get(1006));
             return false;
         }
 
