@@ -6,7 +6,7 @@
  * Time: 17:06
  */
 
-class UserController extends Yaf_Controller_Abstract {
+class UserController extends Yaf\Controller_Abstract {
 
     public function indexAction() {
         return $this->loginAction();

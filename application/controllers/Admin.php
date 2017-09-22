@@ -6,7 +6,7 @@
  * Time: 22:29
  */
 
-class AdminController extends Yaf_Controller_Abstract {
+class AdminController extends Yaf\Controller_Abstract {
 
     public function indexAction() {
         return true;
